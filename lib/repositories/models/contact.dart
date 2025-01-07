@@ -1,6 +1,3 @@
-import 'package:isar/isar.dart';
-
-@embedded
 class Contact{
 
   String? phoneNumber;

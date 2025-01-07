@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:swipezone/domains/location_manager.dart';
 import 'package:swipezone/domains/locations_usecase.dart';
