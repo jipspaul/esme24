@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive_ce/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart'; // Add this import
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:swipezone/repositories/hive_adapter.dart';
+import 'package:swipezone/repositories/models/hive_tester.dart';
 import 'package:swipezone/screens/home_page.dart';
 import 'package:swipezone/screens/planning_page.dart';
 import 'package:swipezone/screens/select_page.dart';
@@ -10,7 +14,14 @@ import 'package:swipezone/theme/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+    var path = await getApplicationDocumentsDirectory();
+    
+    Hive
+      ..init(path.path)
+      ..registerAdapter(TestHiveAdapter());
+      
+  await TestHiveObject.init();
+  
   final pref = await SharedPreferences.getInstance();
   
   runApp(
