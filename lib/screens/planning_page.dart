@@ -18,9 +18,12 @@ class _PlanningPageState extends State<PlanningPage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(child: FilledButton(onPressed: (){
-        GoRouter.of(context).go("/selectpage");
-      }, child: Text(widget.title))),
+      body: Center(
+          child: FilledButton(
+              onPressed: () {
+                GoRouter.of(context).go("/selectpage");
+              },
+              child: Text(widget.title))),
     );
   }
 }

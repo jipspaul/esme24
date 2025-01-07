@@ -5,7 +5,6 @@ import 'categories.dart';
 import 'contact.dart';
 import 'localization.dart';
 
-
 class Location {
   String nom;
   String? description;

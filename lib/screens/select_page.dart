@@ -13,7 +13,7 @@ class SelectPage extends StatefulWidget {
 }
 
 class _SelectPageState extends State<SelectPage> {
-  Map<Location,bool> plans = {};
+  Map<Location, bool> plans = {};
 
   @override
   void initState() {
@@ -22,7 +22,7 @@ class _SelectPageState extends State<SelectPage> {
   }
 
   Future<void> _loadPlans() async {
-    Map<Location,bool> fetchedPlans = LocationManager().filters;
+    Map<Location, bool> fetchedPlans = LocationManager().filters;
     setState(() {
       plans = fetchedPlans;
     });
@@ -39,23 +39,22 @@ class _SelectPageState extends State<SelectPage> {
         itemCount: plans.length,
         itemBuilder: (context, index) {
           bool isCheck = plans.values.elementAt(index);
-          return 
-              ListTile(
-                //leading: Image.network(plans[index].photoUrl ?? "", width: 50, height: 50),
-                title: Text(plans.keys.elementAt(index).nom),
-                trailing:  Checkbox(value: isCheck, onChanged: (val){
-                setState(() {
-                  isCheck = !isCheck;
-                  plans[plans.keys.elementAt(index)] = isCheck;
-                });
-              })
-              );
-          
+          return ListTile(
+              //leading: Image.network(plans[index].photoUrl ?? "", width: 50, height: 50),
+              title: Text(plans.keys.elementAt(index).nom),
+              trailing: Checkbox(
+                  value: isCheck,
+                  onChanged: (val) {
+                    setState(() {
+                      isCheck = !isCheck;
+                      plans[plans.keys.elementAt(index)] = isCheck;
+                    });
+                  }));
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-           GoRouter.of(context).push('/planningpage');
+          GoRouter.of(context).push('/planningpage');
         },
         tooltip: 'Add plan',
         child: const Icon(Icons.add),

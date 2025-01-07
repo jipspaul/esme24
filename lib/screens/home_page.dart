@@ -20,9 +20,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  void createDatabase() async {
-
-  }
+  void createDatabase() async {}
 
   @override
   Widget build(BuildContext context) {
