@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:swipezone/domains/location_manager.dart';
 import 'package:swipezone/domains/locations_usecase.dart';
 import 'package:swipezone/screens/widgets/location_card.dart';
 import 'dart:isolate';
 import 'dart:async';
+
+import 'package:swipezone/theme/theme_provider.dart';
 
 class IsolateMessage {
   final SendPort sendPort;
@@ -83,6 +86,14 @@ class _HomePageState extends State<HomePage> {
 
             return ListView(children: [
               LocationCard(location: data[LocationManager().currentIndex]),
+              Center(
+                child: Switch(
+                  value: Provider.of<ThemeProvider>(context).getThemeMode() == ThemeMode.dark,
+                  onChanged: (value) {
+                    Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+                  },
+                ),
+              ),
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
