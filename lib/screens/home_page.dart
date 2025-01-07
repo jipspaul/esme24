@@ -4,6 +4,22 @@ import 'package:path_provider/path_provider.dart';
 import 'package:swipezone/domains/location_manager.dart';
 import 'package:swipezone/domains/locations_usecase.dart';
 import 'package:swipezone/screens/widgets/location_card.dart';
+import 'dart:isolate';
+import 'dart:async';
+
+class IsolateMessage {
+  final SendPort sendPort;
+  IsolateMessage(this.sendPort);
+}
+
+void popupIsolate(IsolateMessage message) {
+  final Timer periodicTimer = Timer.periodic(
+    const Duration(seconds: 10),
+    (timer) {
+      message.sendPort.send('showPopup');
+    },
+  );
+}
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -15,12 +31,37 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  ReceivePort? receivePort;
+
   @override
   void initState() {
     super.initState();
+    startPopupIsolate();
   }
 
-  void createDatabase() async {}
+  void startPopupIsolate() async {
+    // Create communication ports
+    receivePort = ReceivePort();
+    
+    // Spawn the isolate
+    await Isolate.spawn<IsolateMessage>(
+      popupIsolate,
+      IsolateMessage(receivePort!.sendPort),
+    );
+
+    // Listen for messages from the isolate
+    receivePort!.listen((message) {
+      if (message == 'showPopup') {
+        launchPopUpeach10sec(context);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    receivePort?.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +76,7 @@ class _HomePageState extends State<HomePage> {
           if (snapshot.connectionState == ConnectionState.done) {
             var data = snapshot.data;
             if (data == null || data.isEmpty) {
-              return const Text("No data");
+              return  Text("No data");
             }
 
             LocationManager().locations = data;
@@ -90,6 +131,27 @@ class _HomePageState extends State<HomePage> {
         tooltip: 'Add plan',
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  Future<void> launchPopUpeach10sec(BuildContext context) async {
+    await Future.delayed(const Duration(seconds: 10));
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Hello"),
+          content: const Text("This is a popup"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Close"),
+            ),
+          ],
+        );
+      },
     );
   }
 }
